@@ -58,8 +58,7 @@ public class SecurityConfig{
         // We don't need CSRF for this example
         httpSecurity.csrf().disable()
                 // dont authenticate this particular request
-                .authorizeHttpRequests().requestMatchers("/authenticate", "/register").permitAll().
-                // all other requests need to be authenticated
+                .authorizeHttpRequests().requestMatchers("/authenticate", "/addVendor").permitAll().requestMatchers("/customer").hasAnyAuthority("customer").                // all other requests need to be authenticated
                         anyRequest().authenticated().and().
                 // make sure we use stateless session; session won't be used to
                 // store user's state.

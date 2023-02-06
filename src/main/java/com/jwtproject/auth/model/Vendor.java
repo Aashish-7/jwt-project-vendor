@@ -1,14 +1,17 @@
 package com.jwtproject.auth.model;
 
+import com.jwtproject.auth.role.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 
 @Entity
 @Table(name = "vendor")
@@ -29,6 +32,9 @@ public class Vendor implements UserDetails {
     private String password;
 
     private Boolean active;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     private Vendor(Long id, String vendorName, String vendorEmail, String password){
         this.id = id;
@@ -77,7 +83,7 @@ public class Vendor implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singletonList(new SimpleGrantedAuthority(getRole().getName()));
     }
 
     @Override

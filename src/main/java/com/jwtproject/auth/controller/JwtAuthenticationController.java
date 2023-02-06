@@ -1,5 +1,6 @@
 package com.jwtproject.auth.controller;
 
+import com.jwtproject.auth.dao.JwtResponseRepository;
 import com.jwtproject.auth.dao.VendorRepository;
 import com.jwtproject.auth.model.JwtRequest;
 import com.jwtproject.auth.model.JwtResponse;
@@ -18,18 +19,18 @@ import org.springframework.web.bind.annotation.*;
 public class JwtAuthenticationController {
 
     private AuthenticationProvider authenticationManager;
-
     private JwtTokenUtils jwtTokenUtil;
-
     private VendorServiceImpl vendorService;
     private VendorRepository vendorRepository;
+    private JwtResponseRepository jwtResponseRepository;
 
     @Autowired
-    public JwtAuthenticationController(AuthenticationProvider authenticationManager, JwtTokenUtils jwtTokenUtil, VendorServiceImpl vendorService, VendorRepository vendorRepository) {
+    public JwtAuthenticationController(AuthenticationProvider authenticationManager, JwtTokenUtils jwtTokenUtil, VendorServiceImpl vendorService, VendorRepository vendorRepository, JwtResponseRepository jwtResponseRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.vendorService = vendorService;
         this.vendorRepository = vendorRepository;
+        this.jwtResponseRepository = jwtResponseRepository;
     }
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
@@ -44,9 +45,13 @@ public class JwtAuthenticationController {
 //                .loadUserByUsername(authenticationRequest.getUsername());
 
         String token = jwtTokenUtil.generateToken(vendorRepository.findByVendorEmail(authenticationRequest.getVendorEmail()));
-
         System.out.println(token);
+        JwtResponse jwtResponse = new JwtResponse();
+        jwtResponse.setJwtToken(token);
+        jwtResponse.setEmail(authenticationRequest.getVendorEmail());
+        jwtResponseRepository.save(jwtResponse);
         return ResponseEntity.ok(new JwtResponse(token));
+//        return ResponseEntity.ok(jwtResponseRepository.save(jwtResponse));
     }
 
     private void authenticate(String username, String password) throws Exception {
