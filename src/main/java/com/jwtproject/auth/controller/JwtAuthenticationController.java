@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 public class JwtAuthenticationController {
 
-    private AuthenticationProvider authenticationManager;
-    private JwtTokenUtils jwtTokenUtil;
+    private final AuthenticationProvider authenticationManager;
+    private final JwtTokenUtils jwtTokenUtil;
     private VendorServiceImpl vendorService;
-    private VendorRepository vendorRepository;
-    private JwtResponseRepository jwtResponseRepository;
+    private final VendorRepository vendorRepository;
+    private final JwtResponseRepository jwtResponseRepository;
 
     @Autowired
     public JwtAuthenticationController(AuthenticationProvider authenticationManager, JwtTokenUtils jwtTokenUtil, VendorServiceImpl vendorService, VendorRepository vendorRepository, JwtResponseRepository jwtResponseRepository) {
