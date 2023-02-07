@@ -20,7 +20,7 @@ public class JwtAuthenticationController {
 
     private final AuthenticationProvider authenticationManager;
     private final JwtTokenUtils jwtTokenUtil;
-    private VendorServiceImpl vendorService;
+    public final VendorServiceImpl vendorService;
     private final VendorRepository vendorRepository;
     private final JwtResponseRepository jwtResponseRepository;
 
